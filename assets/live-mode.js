@@ -165,7 +165,7 @@
     saveSession(null);
     sessionStorage.removeItem('arg_auth');
     sessionStorage.removeItem('arg_auth_email');
-    location.reload();
+    location.href = location.pathname;
   };
 
   window.runGlobalAsk = async function () {
@@ -245,4 +245,12 @@
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyBranding, { once: true });
   else applyBranding();
+})();
+
+// Load the access-control layer after the existing demo/live adapters.
+(() => {
+  const script = document.createElement('script');
+  script.src = './assets/access-control.js';
+  script.defer = true;
+  document.head.appendChild(script);
 })();
