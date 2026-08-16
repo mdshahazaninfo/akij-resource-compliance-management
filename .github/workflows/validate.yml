@@ -1,0 +1,44 @@
+name: Validate Compliance Management App
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Validate JavaScript syntax
+        run: |
+          node --check assets/app.js
+          node --check assets/live-mode.js
+          node --check api/health.js
+          node --check api/chat.js
+
+      - name: Validate required files
+        run: |
+          test -f index.html
+          test -f assets/app.css
+          test -f config/agent-catalog.json
+          test -f config/mcp-catalog.json
+          test -f database/schema.sql
+
+      - name: Validate JSON configuration
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('package.json','utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('vercel.json','utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('config/agent-catalog.json','utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('config/mcp-catalog.json','utf8'))"
