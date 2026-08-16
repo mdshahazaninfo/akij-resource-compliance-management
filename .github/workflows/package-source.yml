@@ -1,0 +1,31 @@
+name: Package Full Source Code
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create full source ZIP
+        run: |
+          zip -qr Compliance_Management_System_Control_Tower_Full_Source_Code.zip . \
+            -x '.git/*' \
+            -x 'node_modules/*' \
+            -x '.env' \
+            -x '.env.local' \
+            -x '.vercel/*'
+
+      - name: Upload source package
+        uses: actions/upload-artifact@v4
+        with:
+          name: Compliance_Management_System_Control_Tower_Full_Source_Code
+          path: Compliance_Management_System_Control_Tower_Full_Source_Code.zip
+          retention-days: 7
