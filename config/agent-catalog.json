@@ -1,0 +1,33 @@
+{
+  "system": "Akij Resource Compliance Management",
+  "master_agent": {
+    "name": "Akij Resource Compliance Master Agent",
+    "authority": "orchestrate_and_recommend",
+    "human_authority_required_for": [
+      "official_compliance_status_change",
+      "document_approval",
+      "policy_approval",
+      "capa_assignment",
+      "capa_closure",
+      "regulatory_submission",
+      "critical_nc_closure",
+      "record_deletion"
+    ]
+  },
+  "specialists": [
+    {"id":"regulatory","name":"Regulatory Intelligence Agent","purpose":"requirements, standards, regulatory change impact"},
+    {"id":"obligation","name":"Compliance Obligation Agent","purpose":"obligation mapping and ownership"},
+    {"id":"applicability","name":"Applicability Agent","purpose":"SBU/site/process applicability"},
+    {"id":"assessment","name":"Compliance Assessment Agent","purpose":"requirement-control-document-evidence assessment"},
+    {"id":"document_control","name":"Document Control Agent","purpose":"version, metadata, review and retention control"},
+    {"id":"document_review","name":"Document Review Agent","purpose":"content comparison and requirement mapping"},
+    {"id":"evidence","name":"Evidence & Records Agent","purpose":"evidence completeness, validity and traceability"},
+    {"id":"audit","name":"Audit & Assurance Agent","purpose":"audit preparation and proposed findings"},
+    {"id":"risk","name":"Risk Agent","purpose":"risk-based prioritization"},
+    {"id":"capa","name":"CAPA Agent","purpose":"correction, root-cause and corrective-action drafting"},
+    {"id":"reporting","name":"Management Reporting Agent","purpose":"KPIs, summaries and management assurance"}
+  ],
+  "assurance_chain": [
+    "Requirement","Obligation","Applicability","Risk","Control","Document","Record","Evidence","Assessment","Finding","CAPA","Verification","Compliance Status","Management Assurance"
+  ]
+}
