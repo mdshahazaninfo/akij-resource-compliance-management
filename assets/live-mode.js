@@ -222,3 +222,23 @@
     }
   })();
 })();
+
+// Application display branding. Runs in both Demo and Live Mode without changing functionality.
+(() => {
+  const APP_NAME = 'Compliance Management System Control Tower';
+  const applyBranding = () => {
+    document.title = `${APP_NAME} — Interactive Live Demo`;
+    const loginTitle = document.getElementById('loginTitle');
+    const sidebarTitle = document.querySelector('.brand h2');
+    const mainTitle = document.querySelector('.top h1');
+    const submit = document.querySelector('.login-submit');
+    if (loginTitle) loginTitle.textContent = APP_NAME;
+    if (sidebarTitle) sidebarTitle.textContent = APP_NAME;
+    if (mainTitle) mainTitle.textContent = APP_NAME;
+    if (submit && submit.textContent.trim() === 'Sign in to Compliance Management') {
+      submit.textContent = `Sign in to ${APP_NAME}`;
+    }
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyBranding, { once: true });
+  else applyBranding();
+})();
