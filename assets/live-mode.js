@@ -232,12 +232,16 @@
     const sidebarTitle = document.querySelector('.brand h2');
     const mainTitle = document.querySelector('.top h1');
     const submit = document.querySelector('.login-submit');
+    const dmsNav = document.querySelector('.nav button[data-view="dms"]');
+    const dmsTitle = document.querySelector('#dms .pagehead h2');
     if (loginTitle) loginTitle.textContent = APP_NAME;
     if (sidebarTitle) sidebarTitle.textContent = APP_NAME;
     if (mainTitle) mainTitle.textContent = APP_NAME;
     if (submit && submit.textContent.trim() === 'Sign in to Compliance Management') {
       submit.textContent = `Sign in to ${APP_NAME}`;
     }
+    if (dmsNav) dmsNav.innerHTML = '<span class="ico">▤</span>Document Control / DMS';
+    if (dmsTitle) dmsTitle.textContent = 'Document Control / DMS';
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyBranding, { once: true });
   else applyBranding();
