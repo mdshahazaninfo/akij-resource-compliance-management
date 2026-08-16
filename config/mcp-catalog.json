@@ -1,0 +1,19 @@
+{
+  "architecture": "Akij Resource Compliance Management MCP Control Plane",
+  "servers": [
+    {"name":"ARG-Legal-MCP","purpose":"laws, standards, legal-register and regulatory requirements","default_mode":"read"},
+    {"name":"ARG-CMS-MCP","purpose":"obligations, controls, applicability, status and assessments","default_mode":"read_analyze"},
+    {"name":"ARG-DMS-MCP","purpose":"controlled documents, versions, metadata, review dates and retention","default_mode":"read_analyze"},
+    {"name":"ARG-Evidence-MCP","purpose":"records, evidence, verification and traceability","default_mode":"read"},
+    {"name":"ARG-Audit-MCP","purpose":"audit plans, assurance records, findings and audit logs","default_mode":"read_analyze"},
+    {"name":"ARG-CAPA-MCP","purpose":"CAPA retrieval and controlled draft creation","default_mode":"read_draft"},
+    {"name":"ARG-Identity-MCP","purpose":"user identity, role, SBU and department scope","default_mode":"read"},
+    {"name":"ARG-ERP-MCP","purpose":"ERP, HR, production and enterprise master data","default_mode":"read"},
+    {"name":"ARG-Reporting-MCP","purpose":"KPIs, dashboards and management assurance","default_mode":"read_analyze"}
+  ],
+  "control_rules": {
+    "minimum_required": ["authentication","role_scope","sbu_scope","department_scope","tool_allowlist","audit_log"],
+    "approval_gated": ["official_status_update","capa_assignment","controlled_record_write"],
+    "human_only": ["policy_approval","document_approval","regulatory_submission","critical_nc_closure","official_record_deletion"]
+  }
+}
