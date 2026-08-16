@@ -19,7 +19,7 @@
         const mode = document.getElementById('modeLabel');
         if (engine) engine.textContent = 'OpenAI Live Agent Online';
         if (mode) mode.textContent = 'LIVE AI MODE';
-        if (typeof window.logAudit === 'function') window.logAudit('LIVE_MODE_READY','Server-side OpenAI API is configured.','No');
+        if (typeof logAudit === 'function') logAudit('LIVE_MODE_READY','Server-side OpenAI API is configured.','No');
       }
       return liveReady;
     } catch (_) {
@@ -31,13 +31,13 @@
   function compactContext() {
     const sbu = document.getElementById('scopeSbu')?.value || 'ALL';
     const domain = document.getElementById('scopeDomain')?.value || 'ALL';
-    const obligations = (window.db?.obligations || []).filter(o => (sbu === 'ALL' || o.sbu === sbu) && (domain === 'ALL' || o.domain === domain)).slice(0, 100);
-    const documents = (window.db?.documents || []).filter(d => (sbu === 'ALL' || d.sbu === sbu) && (domain === 'ALL' || d.domain === domain)).slice(0, 80);
-    const evidence = (window.db?.evidence || []).filter(e => sbu === 'ALL' || e.sbu === sbu).slice(0, 120);
-    const capa = (window.db?.capa || []).filter(c => (sbu === 'ALL' || c.sbu === sbu) && (domain === 'ALL' || c.domain === domain)).slice(0, 60);
+    const obligations = db.obligations.filter(o => (sbu === 'ALL' || o.sbu === sbu) && (domain === 'ALL' || o.domain === domain)).slice(0, 100);
+    const documents = db.documents.filter(d => (sbu === 'ALL' || d.sbu === sbu) && (domain === 'ALL' || d.domain === domain)).slice(0, 80);
+    const evidence = db.evidence.filter(e => sbu === 'ALL' || e.sbu === sbu).slice(0, 120);
+    const capa = db.capa.filter(c => (sbu === 'ALL' || c.sbu === sbu) && (domain === 'ALL' || c.domain === domain)).slice(0, 60);
     return {
       notice: 'All supplied application records are synthetic demo data unless replaced by an authorized live data connector.',
-      scope: { sbu, domain, dataDate: window.db?.generated_on || null },
+      scope: { sbu, domain, dataDate: db.generated_on || null },
       obligations,
       documents,
       evidence,
@@ -66,12 +66,12 @@
     box.innerHTML = '<h3>ARG Live AI</h3><div class="meta">Running server-side OpenAI agent…</div>';
     try {
       const data = await askLive(q);
-      box.innerHTML = `<h3>ARG Live AI</h3><div class="meta">${data.model || 'OpenAI'} · ${data.responseId || ''}</div><div class="small" style="white-space:pre-wrap;line-height:1.6">${window.esc ? window.esc(data.output) : String(data.output)}</div>`;
-      if (typeof window.logAudit === 'function') window.logAudit('LIVE_AI_QUERY',q,'No');
+      box.innerHTML = `<h3>ARG Live AI</h3><div class="meta">${esc(data.model || 'OpenAI')} · ${esc(data.responseId || '')}</div><div class="small" style="white-space:pre-wrap;line-height:1.6">${esc(data.output)}</div>`;
+      if (typeof logAudit === 'function') logAudit('LIVE_AI_QUERY',q,'No');
     } catch (e) {
       liveReady = false;
       box.innerHTML = `<h3>Live AI unavailable</h3><div class="meta">Falling back to the built-in synthetic engine.</div>`;
-      if (typeof window.logAudit === 'function') window.logAudit('LIVE_AI_FALLBACK',String(e.message || e),'No');
+      if (typeof logAudit === 'function') logAudit('LIVE_AI_FALLBACK',String(e.message || e),'No');
       setTimeout(() => demoGlobalAsk(), 250);
     }
   };
@@ -81,20 +81,20 @@
     const input = document.getElementById('prompt');
     const q = input?.value.trim();
     if (!q) return;
-    if (typeof window.addChat === 'function') window.addChat('user', q);
+    if (typeof addChat === 'function') addChat('user', q);
     input.value = '';
     try {
       const data = await askLive(q);
-      if (typeof window.addChat === 'function') window.addChat('ai', data.output);
-      if (typeof window.setTrace === 'function') window.setTrace([
+      if (typeof addChat === 'function') addChat('ai', data.output);
+      if (typeof setTrace === 'function') setTrace([
         ['Master Agent','Live request routed through secure server-side API'],
         ['OpenAI Responses API',`Response ${data.responseId || 'completed'}`],
         ['Authority Control','AI output remains advisory; controlled decisions require human approval']
       ]);
-      if (typeof window.logAudit === 'function') window.logAudit('LIVE_AI_WORKSPACE_QUERY',q,'No');
+      if (typeof logAudit === 'function') logAudit('LIVE_AI_WORKSPACE_QUERY',q,'No');
     } catch (e) {
       liveReady = false;
-      if (typeof window.addChat === 'function') window.addChat('ai','Live AI is unavailable, so this request is being handled by the synthetic demo engine.');
+      if (typeof addChat === 'function') addChat('ai','Live AI is unavailable, so this request is being handled by the synthetic demo engine.');
       input.value = q;
       demoSendPrompt();
     }
