@@ -1,0 +1,14 @@
+{
+  "name": "akij-resource-compliance-management",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Akij Resource Compliance Management — demo-first, live-ready compliance and document intelligence platform",
+  "scripts": {
+    "start": "vercel dev",
+    "dev": "vercel dev"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
