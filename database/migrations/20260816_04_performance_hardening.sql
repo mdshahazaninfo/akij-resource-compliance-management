@@ -1,0 +1,40 @@
+create index if not exists idx_org_units_parent on public.org_units(parent_id);
+create index if not exists idx_user_scope_org_unit on public.user_org_scope(org_unit_id);
+create index if not exists idx_obligations_requirement on public.obligations(requirement_id);
+create index if not exists idx_obligations_site on public.obligations(site_id);
+create index if not exists idx_obligations_department on public.obligations(department_id);
+create index if not exists idx_obligations_owner on public.obligations(owner_user_id);
+create index if not exists idx_controls_obligation on public.controls(obligation_id);
+create index if not exists idx_controls_owner on public.controls(owner_user_id);
+create index if not exists idx_documents_department on public.documents(department_id);
+create index if not exists idx_documents_owner on public.documents(owner_user_id);
+create index if not exists idx_documents_approver on public.documents(approver_user_id);
+create index if not exists idx_evidence_sbu on public.evidence(sbu_id);
+create index if not exists idx_evidence_department on public.evidence(department_id);
+create index if not exists idx_evidence_verified_by on public.evidence(verified_by);
+create index if not exists idx_assessments_obligation on public.assessments(obligation_id);
+create index if not exists idx_assessments_assessed_by on public.assessments(assessed_by);
+create index if not exists idx_findings_obligation on public.findings(obligation_id);
+create index if not exists idx_findings_owner on public.findings(owner_user_id);
+create index if not exists idx_capa_finding on public.capa(finding_id);
+create index if not exists idx_capa_obligation on public.capa(obligation_id);
+create index if not exists idx_capa_owner on public.capa(owner_user_id);
+create index if not exists idx_capa_created_by on public.capa(created_by);
+create index if not exists idx_approval_requested_by on public.approval_requests(requested_by);
+create index if not exists idx_approval_decided_by on public.approval_requests(decided_by);
+create index if not exists idx_agent_runs_user on public.agent_runs(user_id);
+create index if not exists idx_audit_actor on public.audit_log(actor_user_id);
+create index if not exists idx_audit_sbu on public.audit_log(sbu_id);
+create index if not exists idx_audit_agent_run on public.audit_log(agent_run_id);
+create index if not exists idx_permits_site on public.permits(site_id);
+create index if not exists idx_permits_owner on public.permits(owner_user_id);
+create index if not exists idx_audits_lead_auditor on public.audits(lead_auditor_user_id);
+
+drop policy if exists "Users read own approval requests" on public.approval_requests;
+create policy "Users read own approval requests" on public.approval_requests for select to authenticated using (requested_by = (select auth.uid()) or decided_by = (select auth.uid()));
+
+drop policy if exists "Users read own agent runs" on public.agent_runs;
+create policy "Users read own agent runs" on public.agent_runs for select to authenticated using (user_id = (select auth.uid()));
+
+drop policy if exists "Users read own or scoped audit log" on public.audit_log;
+create policy "Users read own or scoped audit log" on public.audit_log for select to authenticated using (actor_user_id = (select auth.uid()) or (sbu_id is not null and private.has_org_scope(sbu_id)));
